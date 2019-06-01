@@ -22,7 +22,7 @@ export default Component.extend({
   columns: [],
 
   sortAsc: true,
-  sortProperty: 'name', 
+  sortProperty: null, 
 
   tableId: 'flex-table',
 
@@ -43,7 +43,15 @@ export default Component.extend({
     let sortDir = this.get('sortAsc') ? 'asc' : 'desc';
     return [`${this.get('sortProperty')}:${sortDir}`];
   }),
-  sortedRows: sort('filteredRows','rowsSorting'),
+  _sortedRows: sort('filteredRows','rowsSorting'),
+
+  sortedRows: computed('_sortedRows.[]', 'sortProperty', function() {
+    if (this.sortProperty) {
+      return this._sortedRows;
+    }
+
+    return this.filteredRows;
+  }),
 
   rows: computed('rowData.[]', function(){
     return A(this.get('rowData').map(row => EmberObject.create(row)));
@@ -53,11 +61,16 @@ export default Component.extend({
 
     let filterColumns = this.get('mappedColumns').filter(column => column.get('filterBy') && column.get('filterBy').length > 0);
 
-    return this.get('rows').filter(row => {
-      return filterColumns.every(column => {
-        return String(row.get(column.get('key'))).indexOf(column.get('filterBy')) > -1;
+    if (filterColumns.length) {
+      return this.get('rows').filter(row => {
+        return filterColumns.every(column => {
+          return String(row.get(column.get('key'))).indexOf(column.get('filterBy')) > -1;
+        });
       });
-    });
+    }
+
+    return this.rows;
+
   }),
 
   theadPositioningStyle: computed('scrollLeft', function(){
