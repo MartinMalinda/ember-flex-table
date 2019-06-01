@@ -1,0 +1,17 @@
+<table style={{style}} class="flex-table-header {{tableClass}} {{headerClass}}">
+  <thead>
+    <tr>
+      {{#each mappedColumns as |column index|}}
+        {{flex-table-col-header
+          index=index
+          column=column
+          onDrag=(action "setDraggedColumn")
+          onClick=onTableHeaderClick
+          sortAsc=sortAsc
+          sortProperty=sortProperty
+          canSort=canSort
+        }}
+      {{/each}}
+    </tr>
+  </thead>
+</table>

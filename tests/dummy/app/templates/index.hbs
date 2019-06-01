@@ -1,0 +1,15 @@
+
+{{#flex-table
+  columns=application.columns
+  tableId="people"
+  rowData=application.rowData as |row|}}
+  <tr>
+    <td>{{row.id}}</td>
+    <td>{{row.firstName}}</td>
+    <td>{{row.lastName}}</td>
+    <td>{{row.company}}</td>
+    <td>{{row.address}}</td>
+    <td>{{row.phoneNumber}}</td>
+    <td>{{row.email}}</td>
+  </tr>
+{{/flex-table}}

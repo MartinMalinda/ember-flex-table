@@ -1,0 +1,49 @@
+.flex-table {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  th,td {
+    word-break: break-all;
+  }
+
+  table {
+
+    table-layout: fixed;
+    position: relative;
+    width: 100%;
+
+    thead {
+      position: relative;
+      z-index: 9;
+      will-change: transform;
+
+        &.resizing-column {
+          cursor: ew-resize !important;
+          -webkit-touch-callout: none; /* iOS Safari */
+          -webkit-user-select: none;   /* Chrome/Safari/Opera */
+          -khtml-user-select: none;    /* Konqueror */
+          -moz-user-select: none;      /* Firefox */
+          -ms-user-select: none;       /* Internet Explorer/Edge */
+          user-select: none;           /* Non-prefixed version, currently
+                                    not supported by any browser */
+        }
+    }
+  }
+}
+
+.flex-table-body {
+  position: relative;
+  top: -10px;
+}
+
+
+.flex-table-wrap {
+  width: 100%;
+  overflow: scroll;
+  max-height: calc(100vh - 300px);
+}

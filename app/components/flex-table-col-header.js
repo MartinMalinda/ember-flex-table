@@ -1,0 +1,1 @@
+export { default } from 'ember-flex-table/components/flex-table-col-header';

@@ -7,6 +7,9 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('bootstrap');
+  this.route('inline');
+  this.route('semantic-ui');
 });
 
 export default Router;

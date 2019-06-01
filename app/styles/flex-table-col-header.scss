@@ -1,0 +1,32 @@
+.flex-table-col-header {
+  $width: 20px;
+  position: relative;
+
+  input {
+    max-width: 100%;
+    margin-top: 5px;
+  }
+
+  .handle {
+    position: absolute;
+    top: 0px;
+    width: $width;
+    height: 100%;
+    cursor: ew-resize;
+    // border: 1px dashed transparentize(grey, 0.7);
+
+    &.right {
+      right: -$width/2;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: transparentize(grey, 0.8);;
+    }
+  }
+}

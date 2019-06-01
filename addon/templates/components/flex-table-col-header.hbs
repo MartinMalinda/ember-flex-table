@@ -1,0 +1,8 @@
+{{column.name}}
+{{#if column.sortable}}
+  <i class="icon caret {{caretDirection}} {{if isBeingSorted "red"}}"></i>
+{{/if}}
+{{#if column.filterable}}
+  {{input value=column.filterBy class="form-control"}}
+{{/if}}
+<div class="right handle"></div>

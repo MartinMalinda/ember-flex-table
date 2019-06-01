@@ -1,0 +1,4 @@
+{{!-- Maybe naive implementation, preparing a new array in a component might be more performant --}}
+{{#each mappedColumns as |column|}}
+  <td>{{get row column.key}}</td>
+{{/each}}
