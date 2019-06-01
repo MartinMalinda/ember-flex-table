@@ -42,7 +42,9 @@ export default Component.extend({
     const draggedColumn = this.get('draggedColumn');
 
     if(draggedColumn){
-      let newWidth = $('.flex-table-wrap').scrollLeft() + event.clientX - this.get('draggedColumnPosX');
+      const $wrapEl = this.$().parents().find('.flex-table-wrap');
+      const wrapPosLeft = $wrapEl[0].getBoundingClientRect().x;
+      let newWidth = $wrapEl.scrollLeft() - wrapPosLeft + event.clientX - this.get('draggedColumnPosX');
       const minWidth = this.get('draggedColumn.minWidth');
       if(newWidth < minWidth){
         newWidth = minWidth;

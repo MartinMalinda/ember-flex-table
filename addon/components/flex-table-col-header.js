@@ -29,7 +29,10 @@ export default Component.extend({
     if(event.target.className === "right handle"){
 
       // right handle was clicked, sending out index of this column and it's position
-      this.attrs.onDrag(this.get('index'), $(this.element).position().left);
+      const tableHeaderEl = this.$().parents().find('.flex-table-header')[0];
+      const headerPosLeft = $(tableHeaderEl).position().left;
+      const thisElPosLeft = $(this.element).position().left;
+      this.attrs.onDrag(this.get('index'), thisElPosLeft  - headerPosLeft);
 
     }
   },
