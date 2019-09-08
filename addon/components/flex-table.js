@@ -5,8 +5,10 @@ import Component from '@ember/component';
 import { htmlSafe } from '@ember/template';
 import { run } from '@ember/runloop';
 import $ from 'jquery';
-import EmberObject, { computed } from '@ember/object';
+import EmberObject, { computed, observer } from '@ember/object';
 import layout from '../templates/components/flex-table';
+import { typeOf } from '@ember/utils';
+import { isArray } from '@ember/array';
 
 export default Component.extend({
   layout,
@@ -22,16 +24,16 @@ export default Component.extend({
   columns: [],
 
   sortAsc: true,
-  sortProperty: null, 
+  sortProperty: null,
 
   tableId: 'flex-table',
 
-  mappedColumns: computed(function(){
+  mappedColumns: computed('columns.[]', function () {
     // overwrite widths with those saved in localStorage
     const ls = this.get('localStorage');
     return A(this.get('columns').map(column => {
       let savedWidth = ls.getColumnWidth(this.get('tableId'), column.id);
-      if(savedWidth){
+      if (savedWidth) {
         column.width = savedWidth;
       }
 
@@ -39,25 +41,30 @@ export default Component.extend({
     }));
   }),
 
-  rowsSorting: computed('sortAsc', 'sortProperty', function(){
+  rowsSorting: computed('sortAsc', 'sortProperty', function () {
     let sortDir = this.get('sortAsc') ? 'asc' : 'desc';
     return [`${this.get('sortProperty')}:${sortDir}`];
   }),
-  _sortedRows: sort('filteredRows','rowsSorting'),
+  _sortedRows: sort('filteredRows', 'rowsSorting'),
 
-  sortedRows: computed('_sortedRows.[]', 'sortProperty', function() {
+  sortedRows: computed('_sortedRows.[]', '_sortedRows', 'filteredRows.[]', 'sortProperty', function () {
     if (this.sortProperty) {
+
       return this._sortedRows;
     }
 
     return this.filteredRows;
   }),
 
-  rows: computed('rowData.[]', function(){
+  rows: computed('rowData.[]', 'rowData', function () {
+    if (this.isEmberArray(this.rowData)) {
+      return this.rowData;
+    }
+
     return A(this.get('rowData').map(row => EmberObject.create(row)));
   }),
 
-  filteredRows: computed('rows.[]', 'mappedColumns.@each.filterBy', function(){
+  filteredRows: computed('rows.[]', 'rows', 'rowData.[]', 'mappedColumns.@each.filterBy', function () {
 
     let filterColumns = this.get('mappedColumns').filter(column => column.get('filterBy') && column.get('filterBy').length > 0);
 
@@ -73,18 +80,23 @@ export default Component.extend({
 
   }),
 
-  theadPositioningStyle: computed('scrollLeft', function(){
+  isEmberArray(array) {
+    return isArray(array)
+      && typeOf(this.rowData[0]) === 'instance';
+  },
+
+  theadPositioningStyle: computed('scrollLeft', function () {
     return htmlSafe(`left: -${this.get('scrollLeft')}px`);
   }),
 
-  setScrollLeft($el){
+  setScrollLeft($el) {
     this.set('scrollLeft', $el.scrollLeft());
   },
 
-  moveTableHeaderOnHorizontalScroll($el){
+  moveTableHeaderOnHorizontalScroll($el) {
     $el.scroll(() => {
       run.debounce(this, () => {
-        this.setScrollLeft($el); 
+        this.setScrollLeft($el);
       }, 0);
     });
   },
@@ -101,15 +113,15 @@ export default Component.extend({
   },
 
   actions: {
-    switchSortProperty(property){
-      if(property === this.get('sortProperty')){
+    switchSortProperty(property) {
+      if (property === this.get('sortProperty')) {
         this.toggleProperty('sortAsc');
       } else {
         this.set('sortProperty', property);
       }
     },
 
-    saveColumnWidth(column){
+    saveColumnWidth(column) {
       const ls = this.get('localStorage');
       ls.setColumnWidth(this.get('tableId'), column.id, column.width);
       ls.save();

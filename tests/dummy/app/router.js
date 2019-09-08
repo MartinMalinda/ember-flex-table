@@ -10,6 +10,7 @@ Router.map(function() {
   this.route('bootstrap');
   this.route('inline');
   this.route('semantic-ui');
+  this.route('dynamic');
 });
 
 export default Router;

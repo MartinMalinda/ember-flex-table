@@ -14,30 +14,22 @@
 <div class="flex-table-wrap">
   <div class="flex-content-wrap">
     <table class="flex-table-body {{tableClass}}">
-      {{!-- <thead>
-        <tr>
-          {{#each mappedColumns as |column|}}
-            <th></th>
-          {{/each}}
-        </tr>
-      </thead> --}}
       <colgroup>
         {{#each mappedColumns as |column|}}
-          <col style={{col-width-style column.width}}>
+        <col style={{col-width-style column.width}}>
         {{/each}}
       </colgroup>
       <tbody>
         {{#if hasBlock}}
-          {{#each sortedRows as |row index|}}
-            {{yield row index}}
-          {{/each}}
+        {{#each sortedRows as |row index|}}
+        {{yield row index}}
+        {{/each}}
         {{else}}
-          {{#each sortedRows as |row index|}}
-            {{flex-table-row mappedColumns=mappedColumns row=row}}
-          {{/each}}
+        {{#each sortedRows as |row index|}}
+        {{flex-table-row mappedColumns=mappedColumns row=row}}
+        {{/each}}
         {{/if}}
       </tbody>
     </table>
   </div>
 </div>
-
